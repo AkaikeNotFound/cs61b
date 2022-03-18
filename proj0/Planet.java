@@ -83,4 +83,7 @@ public class Planet{
     this.yyPos = this.yyPos + time*this.yyVel;
   }
 
+  public  void draw(){
+    StdDraw.picture(xxPos,yyPos,imgFileName);
+  }
 }
