@@ -32,7 +32,8 @@ public class LinkedListDeque <T> {
 
   public void addFirst(T i) {
     sentinel.next = new IntNode(sentinel, i, sentinel.next);
-    if(size==0){
+    sentinel.next.next.prev = sentinel.next;
+     if(size==0){
       sentinel.prev = sentinel.next;
     }
     size = size + 1;
@@ -40,6 +41,7 @@ public class LinkedListDeque <T> {
 
   public void addLast(T i) {
     sentinel.prev = new IntNode(sentinel.prev, i, sentinel);
+     sentinel.prev.prev.next = sentinel.prev;
     if(size == 0){
       sentinel.next = sentinel.prev;
     }
@@ -72,7 +74,9 @@ public class LinkedListDeque <T> {
       return null;
     } else {
       T temp = sentinel.next.item;
-      sentinel.next = sentinel.next.next;
+       sentinel.next.next.prev = sentinel;
+       sentinel.next = sentinel.next.next;
+      sentinel.next = sentinel;
       size = size - 1;
       return temp;
     }
@@ -83,6 +87,7 @@ public class LinkedListDeque <T> {
       return null;
     } else {
       T temp = sentinel.prev.item;
+       sentinel.prev.prev.next = sentinel;
       sentinel.prev = sentinel.prev.prev;
       size = size - 1;
       return temp;
