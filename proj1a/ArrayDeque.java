@@ -26,7 +26,7 @@ public class ArrayDeque<T> {
     rate = size * 1.0 / items.length;
   }
 
-  private void copy() {
+  private void copy( int size) {
     T[] newitems = (T[]) new Object[size * 4];
     if (begin > end) {
       System.arraycopy(items, begin, newitems, 0, size - begin);
@@ -35,16 +35,16 @@ public class ArrayDeque<T> {
       System.arraycopy(items, begin, newitems, 0, size);
     }
     begin = 0;
-    end = size;
+    end = size - 1;
     items = newitems;
   }
 
-  private void resizing() {
+  private void resizing(int size) {
     if (size == items.length) {
-      this.copy();
+      this.copy(size);
     }
     if (rate < 0.25 && items.length > 16) {
-      this.copy();
+      this.copy(size);
     }
   }
 
@@ -55,9 +55,9 @@ public class ArrayDeque<T> {
       end = begin;
       items[begin] = item;
     } else {
-      this.rateupdate();
       size = size + 1;
-      this.resizing();
+      this.rateupdate();
+      this.resizing(size - 1);
       if (begin == 0) {
         begin = items.length - 1;
       } else {
@@ -74,9 +74,9 @@ public class ArrayDeque<T> {
       size = size + 1;
       items[end] = item;
     } else {
-      this.rateupdate();
       size = size + 1;
-      this.resizing();
+      this.rateupdate();
+      this.resizing(size - 1);
       if (end == items.length - 1) {
         end = 0;
       } else {
@@ -114,7 +114,7 @@ public class ArrayDeque<T> {
   public T removeFirst() {
     size = size - 1;
     this.rateupdate();
-    this.resizing();
+    this.resizing(size + 1);
     T temp = items[begin];
     if (begin == items.length - 1) {
       begin = 0;
@@ -127,7 +127,7 @@ public class ArrayDeque<T> {
   public T removeLast() {
     size = size - 1;
     this.rateupdate();
-    this.resizing();
+    this.resizing(size + 1);
     T temp = items[end];
     if (end == 0) {
       end = items.length - 1;
