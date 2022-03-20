@@ -112,6 +112,9 @@ public class ArrayDeque<T> {
   }
 
   public T removeFirst() {
+    if(size == 0){
+      return null;
+    }
     size = size - 1;
     this.rateupdate();
     this.resizing(size + 1);
@@ -125,6 +128,9 @@ public class ArrayDeque<T> {
   }
 
   public T removeLast() {
+    if(size == 0){
+      return null;
+    }
     size = size - 1;
     this.rateupdate();
     this.resizing(size + 1);
@@ -139,7 +145,7 @@ public class ArrayDeque<T> {
 
   public T get(int index) {
     if (begin + index >= items.length) {
-      return items[begin + index - items.length - 1];
+      return items[begin + index - items.length];
     } else {
       return items[begin + index];
     }
