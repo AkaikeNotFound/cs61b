@@ -19,7 +19,7 @@ public class LinkedListDeque <T> {
   public LinkedListDeque() {
     sentinel = new IntNode(null, null, null);
     sentinel.prev = sentinel;
-    sentinel.next = sentinel.prev;
+    sentinel.next = sentinel;
     size = 0;
   }
 
@@ -32,12 +32,18 @@ public class LinkedListDeque <T> {
 
   public void addFirst(T i) {
     sentinel.next = new IntNode(sentinel, i, sentinel.next);
-    size += 1;
+    if(size==0){
+      sentinel.prev = sentinel.next;
+    }
+    size = size + 1;
   }
 
   public void addLast(T i) {
     sentinel.prev = new IntNode(sentinel.prev, i, sentinel);
-    size += 1;
+    if(size == 0){
+      sentinel.next = sentinel.prev;
+    }
+    size = size + 1;
   }
 
   public boolean isEmpty() {

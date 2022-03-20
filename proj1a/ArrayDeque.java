@@ -11,8 +11,6 @@ public class ArrayDeque<T> {
     items = (T[]) new Object[8];
     size = 0;
     rate = 0;
-    begin = items.length-1;
-    end = 0;
   }
 
   /* public ArrayDeque(T item) { */
@@ -31,14 +29,13 @@ public class ArrayDeque<T> {
   private void copy(){
     T[] newitems = (T[]) new Object[size*4];
     if (begin > end) {
-      System.arraycopy(items, begin, newitems, begin, size - begin);
-      System.arraycopy(items, 0, newitems, size, begin);
-      end = begin + size - 1;
+      System.arraycopy(items, begin, newitems, 0, size-1 - begin);
+      System.arraycopy(items, 0, newitems, size-1-begin, begin);
     } else {
-      System.arraycopy(items, begin, newitems, 0, size);
-      begin = 0;
-      end = size-1;
+      System.arraycopy(items, begin, newitems, 0, size-1);
     }
+    begin = 0;
+    end = size - 2;
     items = newitems;
   }
 
@@ -52,28 +49,40 @@ public class ArrayDeque<T> {
   }
 
   public void addFirst(T item) {
+    if(size == 0){
+      size = size + 1;
+      begin = 0;
+      end = begin;
+      items[begin] = item;
+    }else{
     size = size + 1;
     this.rateupdate();
     this.resizing();
     if (begin == 0) {
-      begin = items.length;
+      begin = items.length - 1;
     } else {
       begin = begin - 1;
     }
     items[begin] = item;
-  }
+  }}
 
   public void addLast(T item){
+    if(size == 0){
+      end = 0;
+      begin = end;
+      size = size + 1;
+      items[end] = item;
+    }else{
     size = size + 1;
     this.rateupdate();
     this.resizing();
-    if (end == items.length){
+    if (end == items.length - 1){
       end = 0;
     }else{
       end = end + 1;
     }
     items[end] = item;
-  }
+  }}
 
   public boolean isEmpty(){
     if (size == 0){
@@ -91,9 +100,11 @@ public class ArrayDeque<T> {
     int curr = begin;
     for(int i=0;i<size;i++){
       System.out.print(items[curr] + " ");
-      curr = curr + 1;
-      if (curr == items.length){
+      
+      if (curr == items.length - 1){
         curr = 0;
+      }else{
+      curr = curr + 1;
       }
     }
   }
@@ -103,7 +114,7 @@ public class ArrayDeque<T> {
     this.rateupdate();
     this.resizing();
     T temp = items[begin]; 
-    if (begin == items.length){
+    if (begin == items.length - 1){
       begin = 0;
     }else{
       begin = begin + 1;
@@ -117,7 +128,7 @@ public class ArrayDeque<T> {
     this.resizing();
     T temp = items[end];
     if(end == 0){
-      end = items.length;
+      end = items.length - 1;
     }else{
       end = end - 1;
     }
@@ -125,7 +136,7 @@ public class ArrayDeque<T> {
   }
 
   public T get(int index){
-    if (begin+index > items.length){
+    if (begin+index >= items.length){
       return items[begin+index - items.length-1];
     }else{
       return items[begin+index];
