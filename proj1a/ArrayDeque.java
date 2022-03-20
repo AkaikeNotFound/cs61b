@@ -1,9 +1,9 @@
 public class ArrayDeque<T> {
   private T[] items;
   private int size;
-  double rate;
-  int begin;
-  int end;
+  private double rate;
+  private int begin;
+  private int end;
 
 
 
@@ -11,18 +11,18 @@ public class ArrayDeque<T> {
     items = (T[]) new Object[8];
     size = 0;
     rate = 0;
-    begin = items.length - 1;
+    begin = items.length-1;
     end = 0;
   }
 
-  public ArrayDeque(T item) {
-    items = (T []) new Object[8];
-    items[0] = item;
-    size = 1;
-    begin = 0;
-    end = 1;
-    this.rateupdate();
-  }
+  /* public ArrayDeque(T item) { */
+    /* items = (T []) new Object[8]; */
+    /* items[0] = item; */
+    /* size = 1; */
+    /* begin = 0; */
+    /* end = 1; */
+    /* this.rateupdate(); */
+  /* } */
 
   private void rateupdate(){
     rate = size*1.0/items.length;
@@ -30,12 +30,14 @@ public class ArrayDeque<T> {
 
   private void copy(){
     T[] newitems = (T[]) new Object[size*4];
-    if (end < items.length) {
+    if (begin > end) {
       System.arraycopy(items, begin, newitems, begin, size - begin);
       System.arraycopy(items, 0, newitems, size, begin);
       end = begin + size - 1;
     } else {
-      System.arraycopy(items, 0, newitems, 0, size);
+      System.arraycopy(items, begin, newitems, 0, size);
+      begin = 0;
+      end = size-1;
     }
     items = newitems;
   }
@@ -44,7 +46,7 @@ public class ArrayDeque<T> {
     if (size > items.length) {
       this.copy();
     }
-    if (rate < 0.25){
+    if (rate < 0.25 && items.length > 16){
       this.copy(); 
     }
   }
@@ -90,7 +92,7 @@ public class ArrayDeque<T> {
     for(int i=0;i<size;i++){
       System.out.print(items[curr] + " ");
       curr = curr + 1;
-      if (curr > items.length){
+      if (curr == items.length){
         curr = 0;
       }
     }
