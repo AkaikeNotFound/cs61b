@@ -11,6 +11,8 @@ public class ArrayDeque<T> {
     items = (T[]) new Object[8];
     size = 0;
     rate = 0;
+    begin = 1;
+    end = 0;
   }
 
   /* public ArrayDeque(T item) { */
@@ -26,72 +28,55 @@ public class ArrayDeque<T> {
     rate = size * 1.0 / items.length;
   }
 
-  private void copy( int size) {
-    T[] newitems = (T[]) new Object[size * 4];
+  private void copy(int m) {
+    T[] newitems = (T[]) new Object[size * m];
     if (begin > end) {
-      System.arraycopy(items, begin, newitems, 0, size - begin);
-      System.arraycopy(items, 0, newitems, size - begin, begin);
+      System.arraycopy(items, begin, newitems, newitems.length + begin - items.length, items.length - begin);
+      System.arraycopy(items, 0, newitems, 0, end + 1);
     } else {
       System.arraycopy(items, begin, newitems, 0, size);
     }
-    begin = 0;
-    end = size - 1;
+    begin = newitems.length + begin - items.length;
     items = newitems;
   }
 
-  private void resizing(int size) {
-    if (size == items.length) {
-      this.copy(size);
+  private void resizing() {
+    this.rateupdate();
+    if (size > items.length) {
+      this.copy(4);
     }
     if (rate < 0.25 && items.length > 16) {
-      this.copy(size);
+      this.copy(2);
     }
+    this.rateupdate();
   }
 
   public void addFirst(T item) {
-    if (size == 0) {
-      size = size + 1;
-      begin = 0;
-      end = begin;
-      items[begin] = item;
+
+    size = size + 1;
+    this.resizing();
+    if (begin == 0) {
+      begin = items.length - 1;
     } else {
-      size = size + 1;
-      this.rateupdate();
-      this.resizing(size - 1);
-      if (begin == 0) {
-        begin = items.length - 1;
-      } else {
-        begin = begin - 1;
-      }
-      items[begin] = item;
+      begin = begin - 1;
     }
+    items[begin] = item;
   }
 
   public void addLast(T item) {
-    if (size == 0) {
+
+    size = size + 1;
+    this.resizing();
+    if (end == items.length - 1) {
       end = 0;
-      begin = end;
-      size = size + 1;
-      items[end] = item;
     } else {
-      size = size + 1;
-      this.rateupdate();
-      this.resizing(size - 1);
-      if (end == items.length - 1) {
-        end = 0;
-      } else {
-        end = end + 1;
-      }
-      items[end] = item;
+      end = end + 1;
     }
+    items[end] = item;
   }
 
   public boolean isEmpty() {
-    if (size == 0) {
-      return true;
-    } else {
-      return false;
-    }
+    return size == 0;
   }
 
   public int size() {
@@ -112,12 +97,11 @@ public class ArrayDeque<T> {
   }
 
   public T removeFirst() {
-    if(size == 0){
+    if (size == 0) {
       return null;
     }
     size = size - 1;
-    this.rateupdate();
-    this.resizing(size + 1);
+    this.resizing();
     T temp = items[begin];
     if (begin == items.length - 1) {
       begin = 0;
@@ -128,12 +112,11 @@ public class ArrayDeque<T> {
   }
 
   public T removeLast() {
-    if(size == 0){
+    if (size == 0) {
       return null;
     }
     size = size - 1;
-    this.rateupdate();
-    this.resizing(size + 1);
+    this.resizing();
     T temp = items[end];
     if (end == 0) {
       end = items.length - 1;
@@ -142,14 +125,4 @@ public class ArrayDeque<T> {
     }
     return temp;
   }
-
-  public T get(int index) {
-    if (begin + index >= items.length) {
-      return items[begin + index - items.length];
-    } else {
-      return items[begin + index];
-    }
-  }
-
-
 }
