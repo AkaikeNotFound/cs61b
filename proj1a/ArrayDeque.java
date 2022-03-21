@@ -125,4 +125,13 @@ public class ArrayDeque<T> {
     }
     return temp;
   }
+
+     public T get(int index) {
+        if (begin + index >= items.length) {
+            return items[begin + index - items.length];
+        } else {
+            return items[begin + index];
+        }
+    }
+
 }
