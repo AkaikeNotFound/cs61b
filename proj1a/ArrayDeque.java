@@ -44,7 +44,7 @@ public class ArrayDeque<T> {
 
   private void resizing() {
     this.rateupdate();
-    if (size > items.length) {
+    if (size == items.length) {
       this.copy(4);
     }
     if (rate < 0.25 && items.length > 16) {
