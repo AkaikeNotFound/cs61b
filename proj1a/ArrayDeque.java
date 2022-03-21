@@ -33,10 +33,12 @@ public class ArrayDeque<T> {
     if (begin > end) {
       System.arraycopy(items, begin, newitems, newitems.length + begin - items.length, items.length - begin);
       System.arraycopy(items, 0, newitems, 0, end + 1);
+      begin = newitems.length + begin - items.length;
     } else {
       System.arraycopy(items, begin, newitems, 0, end-begin + 1);
+      begin = 0;
+      end = end - begin;
     }
-    begin = newitems.length + begin - items.length;
     items = newitems;
   }
 
