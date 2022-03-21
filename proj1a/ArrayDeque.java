@@ -35,8 +35,8 @@ public class ArrayDeque<T> {
           begin = newitems.length + begin - items.length;
       } else {
           System.arraycopy(items, begin, newitems, 0, end-begin + 1);
-          begin = 0;
           end = end - begin;
+          begin = 0;
       }
       items = newitems;
   }
