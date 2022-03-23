@@ -10,13 +10,34 @@ public class Palindrome {
         return deque;
     }
 
+    private boolean isequal(Deque d){
+        if(d.size() == 0 || d.size()==1){
+            return true;
+        }
+        if(d.removeFirst() == d.removeLast()){
+            return isequal(d);
+        }
+        return false;
+    }
+
     public boolean isPalindrome(String word){
         Deque<Character> deque = wordToDeque(word);
-        for(int i=0;i<Math.ceil(deque.size()/2);i++){
-            if(deque.get(i) != deque.get(deque.size()-1-i)){
-                return false;
-            }
-        }
-        return true;
+        return isequal(deque);
     }
+
+    private boolean isoffbyone(Deque<Character> d,CharacterComparator cc){
+        if(d.size() == 0 || d.size()==1){
+            return true;
+        }
+        if(cc.equalChars(d.removeFirst(),d.removeLast())){
+            return isoffbyone(d,cc);
+        }
+        return false;
+    }
+
+    public boolean isPalindrome(String word, CharacterComparator cc){
+        Deque<Character> deque = wordToDeque(word);
+        return isoffbyone(deque,cc);
+    }
+
 }
