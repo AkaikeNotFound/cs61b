@@ -9,7 +9,7 @@ public class OffByN implements CharacterComparator{
         if(!Character.isLetter(x) || !Character.isLetter(y)){
             return false;
         }
-        int diff = Character.getNumericValue(x) - Character.getNumericValue(y);
+        int diff = x - y;
         return diff == n || diff == -n ;
     }
 }

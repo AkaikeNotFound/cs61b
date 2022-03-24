@@ -26,10 +26,15 @@ public class Palindrome {
     }
 
     private boolean isoffbyone(Deque<Character> d,CharacterComparator cc){
-        if(d.size() == 0 || d.size()==1){
+        if(d.size() == 0){
             return true;
         }
-        if(cc.equalChars(d.removeFirst(),d.removeLast())){
+
+        if(d.size() == 1 && Character.isLetter(d.removeFirst())){
+            return true;
+        }
+
+        if(cc.equalChars(d.removeFirst(),d.removeLast()) && Character.isLetter(d.removeFirst()) && Character.isLetter(d.removeLast())){
             return isoffbyone(d,cc);
         }
         return false;
