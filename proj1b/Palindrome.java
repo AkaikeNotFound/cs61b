@@ -29,12 +29,12 @@ public class Palindrome {
         if(d.size() == 0){
             return true;
         }
-
-        if(d.size() == 1 && Character.isLetter(d.removeFirst())){
-            return true;
+        if(d.size() == 1){
+            return Character.isLetter(d.removeLast());
         }
-
-        if(cc.equalChars(d.removeFirst(),d.removeLast()) && Character.isLetter(d.removeFirst()) && Character.isLetter(d.removeLast())){
+        char df = d.removeFirst();
+        char dl = d.removeFirst();
+        if(cc.equalChars(df,dl) && Character.isLetter(df) &&Character.isLetter(dl)){
             return isoffbyone(d,cc);
         }
         return false;
